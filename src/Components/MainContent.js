@@ -1,30 +1,17 @@
 import React from "react";
-//import jsQR from "jsqr";
+// import jsQR from "jsqr";
 import QRCode from "qrcode"; //requires npm install qrcode, originated from: https://github.com/soldair/node-qrcode
 // also covered here : https://davidwalsh.name/create-qr-code
+import QrReader from "react-qr-reader";
+
 class MainContent extends React.Component {
   constructor(props) {
     super(props);
     this.state = { value: "" };
-
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleScan = this.handleScan.bind(this);
   }
-  /*
-  readCode() {
-    const jsQR = require("jsqr");
-
-    let imageData = new (500, 500)();
-
-    const code = jsQR(imageData, imageData.width, imageData.height);
-
-    if (code) {
-      console.log("Found QR code", code);
-    }
-  }
-*/
-
-  
 
   handleChange(event) {
     this.setState({ value: event.target.value });
@@ -32,25 +19,49 @@ class MainContent extends React.Component {
 
   handleSubmit = event => {
     event.preventDefault();
-    getTicket(this.state.value).then(data => {
-      console.log(data);
-      document.getElementById("ticketid").innerText = data.ticketid;
-      document.getElementById("eventname").innerText = data.event.name;
-      document.getElementById("tickettype").innerText = data.type.type;
-      document.getElementById("valid").innerText = data.valid;
-      document.getElementById("used").innerText = data.used;
-      generateQR(data.ticketcode);
-    });
+    this.showTicketInfo();
   };
 
-  render() {
+  showTicketInfo() {
+    try {
+      getTicket(this.state.value).then(data => {
+        console.log(data);
+        document.getElementById("ticketid").innerText = data.ticketid;
+        document.getElementById("eventname").innerText = data.event.name;
+        document.getElementById("tickettype").innerText = data.type.type;
+        document.getElementById("valid").innerText = data.valid;
+        document.getElementById("used").innerText = data.used;
+        generateQR(data.ticketcode);
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
+  handleScan(data) {
+    console.log(data);
+    if (data) {
+      this.setState({
+        value: data
+      });
+      this.showTicketInfo();
+    }
+  }
+
+  showReader() {
+    document.getElementById("QRReader").style = {display : "flex"}
+  }
+  handleError(err) {
+    console.error(err);
+  }
+  render() {
     return (
       <div>
         <form onSubmit={this.handleSubmit}>
           <label style={{ color: "#61dafb" }}>
             Insert ticket-code:
             <input
+              id="ticketcode"
               type="text"
               value={this.state.value}
               onChange={this.handleChange}
@@ -58,38 +69,54 @@ class MainContent extends React.Component {
           </label>
           <input type="submit" value="Submit" />
         </form>
+        <button id="readQR" className="btn btn-success" onClick= {this.showReader}>
+          Or read a QR-code
+        </button>
+        <span id = "QRReader" className="container" style = {{display:"none"}}>
+ 
 
-        <table className="table table-dark table-striped table-borderless text-left border border-dark">
-          <thead>
-            <tr>
-              <th>
-                <h3>Ticket info:</h3>
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <th>Ticket id: </th>
-              <td id="ticketid"></td>
-            </tr>
-            <tr>
-              <th>Event name: </th>
-              <td id="eventname"></td>
-            </tr>
-            <tr>
-              <th>Ticket type:</th>
-              <td id="tickettype"></td>
-            </tr>
-            <tr>
-              <th>Validity: </th>
-              <td id="valid"></td>
-            </tr>
-            <tr>
-              <th>Used: </th>
-              <td id="used"></td>
-            </tr>
-          </tbody>
-        </table>
+          <QrReader
+            delay={300}
+            onError={this.handleError}
+            onScan={this.handleScan}
+            style={{ width: "50%" }}
+            />
+            </span>
+        
+        <div>
+          <table className="table table-dark table-striped table-borderless text-left border border-dark">
+            <thead>
+              <tr>
+                <th>
+                  <h3>Ticket info:</h3>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th>Ticket id: </th>
+                <td id="ticketid"></td>
+              </tr>
+              <tr>
+                <th>Event name: </th>
+                <td id="eventname"></td>
+              </tr>
+              <tr>
+                <th>Ticket type:</th>
+                <td id="tickettype"></td>
+              </tr>
+              <tr>
+                <th>Validity: </th>
+                <td id="valid"></td>
+              </tr>
+              <tr>
+                <th>Used: </th>
+                <td id="used"></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
         <canvas id="qr" width="200" height="200"></canvas>
       </div>
     );
@@ -98,12 +125,12 @@ class MainContent extends React.Component {
 
 const generateQR = async text => {
   try {
-    console.log(await QRCode.toDataURL(text))
-    await QRCode.toCanvas(document.getElementById("qr"), text)
+    console.log(await QRCode.toDataURL(text));
+    await QRCode.toCanvas(document.getElementById("qr"), text);
   } catch (err) {
-    console.error(err)
+    console.error(err);
   }
-}
+};
 
 async function getTicket(code = "") {
   const auth = btoa("niilo:salasana");

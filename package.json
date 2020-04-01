@@ -12,6 +12,7 @@
     "react": "^16.13.0",
     "react-dom": "^16.13.0",
     "react-qr-code": "file:node_modules/react-qr-code",
+    "react-qr-reader": "^2.2.1",
     "react-scripts": "3.4.0"
   },
   "scripts": {
