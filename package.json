@@ -6,8 +6,12 @@
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.4.1",
     "@testing-library/user-event": "^7.2.1",
+    "jsqr": "^1.2.0",
+    "qrcode": "^1.4.4",
+    "qrcode.react": "^1.0.0",
     "react": "^16.13.0",
     "react-dom": "^16.13.0",
+    "react-qr-code": "file:node_modules/react-qr-code",
     "react-scripts": "3.4.0"
   },
   "scripts": {

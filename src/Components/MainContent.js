@@ -1,5 +1,7 @@
 import React from "react";
-
+//import jsQR from "jsqr";
+import QRCode from "qrcode"; //requires npm install qrcode, originated from: https://github.com/soldair/node-qrcode
+// also covered here : https://davidwalsh.name/create-qr-code
 class MainContent extends React.Component {
   constructor(props) {
     super(props);
@@ -8,6 +10,21 @@ class MainContent extends React.Component {
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
+  /*
+  readCode() {
+    const jsQR = require("jsqr");
+
+    let imageData = new (500, 500)();
+
+    const code = jsQR(imageData, imageData.width, imageData.height);
+
+    if (code) {
+      console.log("Found QR code", code);
+    }
+  }
+*/
+
+  
 
   handleChange(event) {
     this.setState({ value: event.target.value });
@@ -15,21 +32,23 @@ class MainContent extends React.Component {
 
   handleSubmit = event => {
     event.preventDefault();
-    //alert("A code was submitted: " + this.state.value); //test code
     getTicket(this.state.value).then(data => {
       console.log(data);
-      document.getElementById("ticketid").append(data.ticketid);
-      document.getElementById("eventname").append(data.event.name);
-      document.getElementById("tickettype").append(data.type.type);
-
+      document.getElementById("ticketid").innerText = data.ticketid;
+      document.getElementById("eventname").innerText = data.event.name;
+      document.getElementById("tickettype").innerText = data.type.type;
+      document.getElementById("valid").innerText = data.valid;
+      document.getElementById("used").innerText = data.used;
+      generateQR(data.ticketcode);
     });
   };
 
   render() {
+
     return (
       <div>
         <form onSubmit={this.handleSubmit}>
-          <label style = {{color: "#61dafb"}}>
+          <label style={{ color: "#61dafb" }}>
             Insert ticket-code:
             <input
               type="text"
@@ -41,7 +60,7 @@ class MainContent extends React.Component {
         </form>
 
         <table className="table table-dark table-striped table-borderless text-left border border-dark">
-          <thead >
+          <thead>
             <tr>
               <th>
                 <h3>Ticket info:</h3>
@@ -61,10 +80,28 @@ class MainContent extends React.Component {
               <th>Ticket type:</th>
               <td id="tickettype"></td>
             </tr>
+            <tr>
+              <th>Validity: </th>
+              <td id="valid"></td>
+            </tr>
+            <tr>
+              <th>Used: </th>
+              <td id="used"></td>
+            </tr>
           </tbody>
         </table>
+        <canvas id="qr" width="200" height="200"></canvas>
       </div>
     );
+  }
+}
+
+const generateQR = async text => {
+  try {
+    console.log(await QRCode.toDataURL(text))
+    await QRCode.toCanvas(document.getElementById("qr"), text)
+  } catch (err) {
+    console.error(err)
   }
 }
 
