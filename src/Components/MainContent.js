@@ -2,7 +2,7 @@ import React from "react";
 // import jsQR from "jsqr";
 import QRCode from "qrcode"; //requires npm install qrcode, originated from: https://github.com/soldair/node-qrcode
 // also covered here : https://davidwalsh.name/create-qr-code
-import QrReader from "react-qr-reader";
+import QrReader from "react-qr-reader"; //https://reactjsexample.com/react-component-for-reading-qr-codes-from-webcam/
 
 class MainContent extends React.Component {
   constructor(props) {
@@ -49,7 +49,7 @@ class MainContent extends React.Component {
   }
 
   showReader() {
-    document.getElementById("QRReader").style = {display : "flex"}
+    document.getElementById("QRReader").style = { display: "flex" };
   }
   handleError(err) {
     console.error(err);
@@ -69,20 +69,22 @@ class MainContent extends React.Component {
           </label>
           <input type="submit" value="Submit" />
         </form>
-        <button id="readQR" className="btn btn-success" onClick= {this.showReader}>
+        <button
+          id="readQR"
+          className="btn btn-success"
+          onClick={this.showReader}
+        >
           Or read a QR-code
         </button>
-        <span id = "QRReader" className="container" style = {{display:"none"}}>
- 
-
+        <span id="QRReader" className="container" style={{ display: "none" }}>
           <QrReader
             delay={300}
             onError={this.handleError}
             onScan={this.handleScan}
             style={{ width: "50%" }}
-            />
-            </span>
-        
+          />
+        </span>
+
         <div>
           <table className="table table-dark table-striped table-borderless text-left border border-dark">
             <thead>
@@ -115,8 +117,13 @@ class MainContent extends React.Component {
               </tr>
             </tbody>
           </table>
+          <button
+            // onClick={readTicket(this.state.value)}
+            className="btn btn-danger"
+          >
+            USE THIS TICKET!
+          </button>
         </div>
-
         <canvas id="qr" width="200" height="200"></canvas>
       </div>
     );
@@ -149,4 +156,24 @@ async function getTicket(code = "") {
   return await response.json();
 }
 
+/* async function readTicket(code = "") {
+  const auth = btoa("niilo:salasana");
+  const response = await fetch(
+    "http://localhost:8080/api/tickets/read/" + code,
+    {
+      method: "PATCH",
+      mode: "cors",
+      cache: "no-cache",
+      credentials: "same-origin",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Basic " + auth
+      },
+      redirect: "follow",
+      referrerPolicy: "no-referrer"
+    }
+  );
+  return await response.json();
+}
+ */
 export default MainContent;
