@@ -11,6 +11,7 @@ class MainContent extends React.Component {
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleScan = this.handleScan.bind(this);
+    this.readTicket = this.readTicket.bind(this);
   }
 
   handleChange(event) {
@@ -51,9 +52,37 @@ class MainContent extends React.Component {
   showReader() {
     document.getElementById("QRReader").style = { display: "flex" };
   }
+
   handleError(err) {
     console.error(err);
   }
+
+  async readTicket(event) {
+    event.preventDefault();
+    const auth = btoa("niilo:salasana");
+    // eslint-disable-next-line
+    const response = await fetch(
+      "http://localhost:8080/api/tickets/read/" + this.state.value,
+      {
+        method: "PATCH",
+        mode: "cors",
+        cache: "no-cache",
+        credentials: "same-origin",
+        headers: {
+          Accept : 'text/html; charset=UTF-8',
+          Authorization: "Basic " + auth
+        },
+        redirect: "follow",
+        referrerPolicy: "no-referrer"
+      }
+    )
+      .then(response => response.json())
+      .then(response => {
+        document.getElementById("result").innerText = JSON.stringify(response);
+        console.log(response);
+      });
+  }
+
   render() {
     return (
       <div>
@@ -85,7 +114,7 @@ class MainContent extends React.Component {
           />
         </span>
 
-        <div>
+        <div className="container">
           <table className="table table-dark table-striped table-borderless text-left border border-dark">
             <thead>
               <tr>
@@ -117,12 +146,12 @@ class MainContent extends React.Component {
               </tr>
             </tbody>
           </table>
-          <button
-            // onClick={readTicket(this.state.value)}
+          <input
+            onClick={this.readTicket}
             className="btn btn-danger"
-          >
-            USE THIS TICKET!
-          </button>
+            defaultValue="Use this ticket!"
+          ></input>
+          <p id="result" style={{ color: "#61dafb" }}></p>
         </div>
         <canvas id="qr" width="200" height="200"></canvas>
       </div>
@@ -156,24 +185,4 @@ async function getTicket(code = "") {
   return await response.json();
 }
 
-/* async function readTicket(code = "") {
-  const auth = btoa("niilo:salasana");
-  const response = await fetch(
-    "http://localhost:8080/api/tickets/read/" + code,
-    {
-      method: "PATCH",
-      mode: "cors",
-      cache: "no-cache",
-      credentials: "same-origin",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Basic " + auth
-      },
-      redirect: "follow",
-      referrerPolicy: "no-referrer"
-    }
-  );
-  return await response.json();
-}
- */
 export default MainContent;
