@@ -1,7 +1,6 @@
 {
   "name": "ticketguru",
   "version": "0.1.0",
-  
   "engines": {
     "node": "12.16.x"
   },
@@ -24,6 +23,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
+
   "eslintConfig": {
     "extends": "react-app"
   },
