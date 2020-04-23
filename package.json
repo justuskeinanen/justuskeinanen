@@ -1,7 +1,9 @@
 {
   "name": "ticketguru",
   "version": "0.1.0",
-  "private": true,
+  "engines": {
+    "node": "12.16.x"
+  },
   "dependencies": {
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.4.1",
@@ -22,6 +24,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
+
   "eslintConfig": {
     "extends": "react-app"
   },
