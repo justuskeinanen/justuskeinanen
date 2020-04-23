@@ -58,6 +58,7 @@ class MainContent extends React.Component {
     return (
       <div>
         <form onSubmit={this.handleSubmit}>
+
           <label style={{ color: "#61dafb" }}>
             Insert ticket-code:
             <input
@@ -68,6 +69,10 @@ class MainContent extends React.Component {
             ></input>
           </label>
           <input type="submit" value="Submit" />
+          
+          
+
+          
         </form>
         <button
           id="readQR"
@@ -118,7 +123,7 @@ class MainContent extends React.Component {
             </tbody>
           </table>
           <button
-            // onClick={readTicket(this.state.value)}
+            onClick={readTicket(this.state.value)}
             className="btn btn-danger"
           >
             USE THIS TICKET!
@@ -156,7 +161,8 @@ async function getTicket(code = "") {
   return await response.json();
 }
 
-/* async function readTicket(code = "") {
+ async function readTicket(code = "") {
+
   const auth = btoa("niilo:salasana");
   const response = await fetch(
     "http://localhost:8080/api/tickets/read/" + code,
@@ -175,5 +181,8 @@ async function getTicket(code = "") {
   );
   return await response.json();
 }
- */
+ 
+
+
+
 export default MainContent;
