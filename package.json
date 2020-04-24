@@ -16,6 +16,7 @@
     "react-dom": "^16.13.0",
     "react-qr-code": "file:node_modules/react-qr-code",
     "react-qr-reader": "^2.2.1",
+    "react-router-dom": "^5.1.2",
     "react-scripts": "3.4.0"
   },
   "scripts": {
@@ -24,7 +25,6 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
-
   "eslintConfig": {
     "extends": "react-app"
   },

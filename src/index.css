@@ -1,13 +1,63 @@
 body {
   margin: 0;
+  color: black;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  align-content: center;
+
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+.half {
+  width: 55%;
+  margin: auto;
+  height: 100%;
+}
+
+.main {
+  align-content: center;
+  display: flex;
+  flex-wrap: wrap;
+  height: 100%;
+  margin-top: 5%;
+  height: 100%;
+  color: black;
+  padding: 3%;
+}
+
+.ticketinfo {
+  align-content: center;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.canva {
+  margin-left: 5%;
+}
+
+.formi {
+  width: 25%;
+  padding-left: 5%;
+}
+
+.reader {
+  align-content: center;
+}
+
+p {
+  color: white;
+}
+
+.App-footer {
+  position: absolute;
+  bottom: 0;
+
+  width: 100%;
 }

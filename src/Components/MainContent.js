@@ -3,6 +3,7 @@ import React from "react";
 import QRCode from "qrcode"; //requires npm install qrcode, originated from: https://github.com/soldair/node-qrcode
 // also covered here : https://davidwalsh.name/create-qr-code
 import QrReader from "react-qr-reader"; //https://reactjsexample.com/react-component-for-reading-qr-codes-from-webcam/
+import Header from "./Header";
 
 class MainContent extends React.Component {
   constructor(props) {
@@ -62,7 +63,7 @@ class MainContent extends React.Component {
     const auth = btoa("niilo:salasana");
     // eslint-disable-next-line
     const response = await fetch(
-      "http://localhost:8080/api/tickets/read/" + this.state.value,
+      "https://ticketguru.herokuapp.com/api/tickets/read/" + this.state.value,
       {
         method: "PATCH",
         mode: "cors",
@@ -85,9 +86,11 @@ class MainContent extends React.Component {
 
   render() {
     return (
-      <div>
-        <form onSubmit={this.handleSubmit}>
+      
+      <div class ="reader">
+      <Header/>
 
+        <form onSubmit={this.handleSubmit}>
           <label style={{ color: "#61dafb" }}>
             Insert ticket-code:
             <input
@@ -98,10 +101,6 @@ class MainContent extends React.Component {
             ></input>
           </label>
           <input type="submit" value="Submit" />
-          
-          
-
-          
         </form>
         <button
           id="readQR"
@@ -119,7 +118,8 @@ class MainContent extends React.Component {
           />
         </span>
 
-        <div className="container">
+<div class="ticketinfo">
+        <div class="formi">
           <table className="table table-dark table-striped table-borderless text-left border border-dark">
             <thead>
               <tr>
@@ -151,19 +151,21 @@ class MainContent extends React.Component {
               </tr>
             </tbody>
           </table>
-<<<<<<< HEAD
-          <button
-            onClick={readTicket(this.state.value)}
-=======
+
           <input
             onClick={this.readTicket}
->>>>>>> e5b458a8b462ba20319534241ca881344085463d
             className="btn btn-danger"
             defaultValue="Use this ticket!"
           ></input>
+
           <p id="result" style={{ color: "#61dafb" }}></p>
         </div>
-        <canvas id="qr" width="200" height="200"></canvas>
+
+        <canvas class="canva" id="qr" width="300" height="300">
+
+        </canvas>
+
+      </div> 
       </div>
     );
   }
@@ -180,7 +182,7 @@ const generateQR = async text => {
 
 async function getTicket(code = "") {
   const auth = btoa("niilo:salasana");
-  const response = await fetch("http://localhost:8080/api/tickets/" + code, {
+  const response = await fetch("https://ticketguru.herokuapp.com/api/tickets/" + code, {
     method: "GET",
     mode: "cors",
     cache: "no-cache",
@@ -195,31 +197,4 @@ async function getTicket(code = "") {
   return await response.json();
 }
 
-<<<<<<< HEAD
- async function readTicket(code = "") {
-
-  const auth = btoa("niilo:salasana");
-  const response = await fetch(
-    "http://localhost:8080/api/tickets/read/" + code,
-    {
-      method: "PATCH",
-      mode: "cors",
-      cache: "no-cache",
-      credentials: "same-origin",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Basic " + auth
-      },
-      redirect: "follow",
-      referrerPolicy: "no-referrer"
-    }
-  );
-  return await response.json();
-}
- 
-
-
-
-=======
->>>>>>> e5b458a8b462ba20319534241ca881344085463d
 export default MainContent;

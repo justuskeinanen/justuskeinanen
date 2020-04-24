@@ -1,6 +1,6 @@
 import React from "react";
 import {useState, useEffect} from "react";
-
+import Header from "./Header";
 
 function Buy () {
 
@@ -15,10 +15,8 @@ const [pcs, setPcs] = useState("");
 //default 14
 const [orderid, setOrderid] = useState('14');
 const [events, setEvents] = useState([]);
-//default 38
-const [selectedEvent, setSelectedEvent] = useState('38');
-//default 4 eli aikuinen
-const [selectedType, setSelectedType] = useState('4');
+const [selectedEvent, setSelectedEvent] = useState('');
+const [selectedType, setSelectedType] = useState('');
 //const [tickettypes, setTickettypes] = useState([]);
 
 
@@ -130,20 +128,31 @@ const [selectedType, setSelectedType] = useState('4');
 */
 
     return (
-	
-        <div>
+    <div>
+    <Header/>   
+        
+    <div class ="main">
+ 
 
-    <input type="submit" value="Uusi tilaus" onClick={getOrder}/>
+    <div class="formi">
+
+        <div class="form-group">
+            <button type="button" class="btn btn-secondary btn-lg btn-block" onClick={getOrder}>Uusi tilaus</button>    
+        </div> 
+
+        <div class="form-group">   
+    <p>Käsittelyssä oleva tilaus: {orderid}  (luo uusi jos tyhjä) </p>
+        </div>
         
         <form>
-        <label>
-        Lippujen määrä:
-        <input type="text" value={pcs} onChange={ pcs => setPcs(pcs.currentTarget.value) }  />
-        </label>
+        <div class="form-group">   
+        <input class="form-control" type="number" value={pcs} id="example-number-input" onChange={ pcs => setPcs(pcs.currentTarget.value) }></input>    
+        </div> 
 
-        <label>
-          Tapahtuma:
-          <select value={selectedEvent} onChange={selectedEvent => setSelectedEvent(selectedEvent.currentTarget.value)}>
+
+        <div class="form-group">  
+          <select class="form-control" id="exampleFormControlSelect1" value={selectedEvent} onChange={selectedEvent => setSelectedEvent(selectedEvent.currentTarget.value)}>
+            <option value="0">Valitse tapahtuma</option>   
             {events.map(item => (
                 <option
                 key={item.eventid}
@@ -153,16 +162,16 @@ const [selectedType, setSelectedType] = useState('4');
                 </option>
             ))}
          </select>
-        </label>
+         </div>
 
-        <label>
-          Lipputyyppi:
-          <select value={selectedType} onChange={(selectedType) => setSelectedType(selectedType.target.value)}>
+        <div class="form-group">  
+          <select class="form-control" id="exampleFormControlSelect1"  value={selectedType} onChange={(selectedType) => setSelectedType(selectedType.target.value)}>
+          <option value="4">Valitse lipputyyppi</option>
             <option value="4">Aikuinen</option>
             <option value="5">Lapsi</option>
             <option value="6">Opiskelija</option>
           </select>
-        </label>
+          </div>
 
 {/*
         <label>
@@ -179,13 +188,15 @@ const [selectedType, setSelectedType] = useState('4');
          </select>
         </label>
  */}
-
-
-    <input type="submit" value="Osta" onClick={buy}/>
+        <div class="form-group">
+            <button type="button" class="btn btn-secondary btn-lg btn-block" onClick={buy}>Osta liput</button>    
+        </div> 
 
     </form>
+    </div>
 
-    <table className="table table-dark table-striped table-borderless text-left border border-dark">
+    <div class="half">
+        <table className="table table-dark table-striped table-borderless text-left border border-dark">
             <thead>
             <tr>
                 <th>Tapahtuma</th>
@@ -193,6 +204,7 @@ const [selectedType, setSelectedType] = useState('4');
                 <th>Koodi</th>
             </tr>
             </thead>
+
             <tbody>
             {tickets.map(ticket => (
             <tr key ={ticket.ticketid}>
@@ -202,9 +214,10 @@ const [selectedType, setSelectedType] = useState('4');
             </tr>    
             ))}
             </tbody>
-		    </table>
-        
-           </div>
+		 </table>
+     </div>   
+    </div>
+    </div>
           );
         };
  
