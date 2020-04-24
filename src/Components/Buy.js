@@ -1,23 +1,29 @@
 import React from "react";
 import {useState, useEffect} from "react";
 import Header from "./Header";
+import QRCode from "qrcode.react";
+
 
 function Buy () {
 
     useEffect(() => {
         getEvents();
-        //getTypes();
     }, []);
 
+    useEffect(() => {
+        total();
+    });
+
+var QRCode = require('qrcode.react');
 
 const [tickets, setTickets] = useState([]);
 const [pcs, setPcs] = useState("");
-//default 14
-const [orderid, setOrderid] = useState('14');
+const [orderid, setOrderid] = useState('');
 const [events, setEvents] = useState([]);
 const [selectedEvent, setSelectedEvent] = useState('');
 const [selectedType, setSelectedType] = useState('');
-//const [tickettypes, setTickettypes] = useState([]);
+const [sold, setSold] = useState([]);
+const [sum, setSum] =useState(0);
 
 
       async function getOrder() {
@@ -102,30 +108,55 @@ const [selectedType, setSelectedType] = useState('');
 
 
 
-/* jos joskus tickettypeidt pitää hakea
-         async function getTypes() {
-            try {   
-                 const auth = btoa('niilo:salasana');
-                 const response = await fetch("https://ticketguru.herokuapp.com/autoapi/ticketTypes", {
-                 method : 'get',
-                 mode: 'cors',
-                 cache : 'no-cache',
-                 credentials : 'same-origin',
-                 headers : {
-                     'Accept': 'application/json',
-                     'Content-Type' : 'application/json',
-                     'Authorization' : 'Basic ' + auth,
+             async function print(evt) {
+                evt.preventDefault(); 
+                console.log(orderid);
+                try {   
+                     const auth = btoa('niilo:salasana');
+                     const response = await fetch("https://ticketguru.herokuapp.com/api/orders/"+  orderid+"/tickets" , {
+                     method : 'get',
+                     mode: 'cors',
+                     cache : 'no-cache',
+                     credentials : 'same-origin',
+                     headers : {
+                         'Accept': 'application/json',
+                         'Content-Type' : 'application/json',
+                         'Authorization' : 'Basic ' + auth,
+                     },                
+                     });
+                 const json = await response.json();
+                     console.log(json);
+                     setSold(json)
+                 } catch (error) {
+                     console.log("error");
                  }
-                 });
-             const json = await response.json();
-                 console.log(json);
-                 setTickettypes(json)
-             } catch (error) {
-                 console.log("error");
-             }
-             }
+                 }
 
-*/
+
+                 async function total() {
+                    console.log(orderid);
+                    try {   
+                         const auth = btoa('niilo:salasana');
+                         const response = await fetch("https://ticketguru.herokuapp.com/autoapi/orders/"+  orderid , {
+                         method : 'get',
+                         mode: 'cors',
+                         cache : 'no-cache',
+                         credentials : 'same-origin',
+                         headers : {
+                             'Accept': 'application/json',
+                             'Content-Type' : 'application/json',
+                             'Authorization' : 'Basic ' + auth,
+                         },                
+                         });
+                     const json = await response.json();
+                         console.log(json);
+                         setSum(json.total);
+                     } catch (error) {
+                         console.log("error");
+                     }
+                     }
+
+
 
     return (
     <div>
@@ -173,24 +204,13 @@ const [selectedType, setSelectedType] = useState('');
           </select>
           </div>
 
-{/*
-        <label>
-          Lipputyyppi:
-          <select>
-            {tickettypes.map(type => (
-                <option
-                key={type.tickettypeid}
-                value={type.tickettypeid}
-                >
-                {item.type}
-                </option>
-            ))}
-         </select>
-        </label>
- */}
         <div class="form-group">
             <button type="button" class="btn btn-secondary btn-lg btn-block" onClick={buy}>Osta liput</button>    
         </div> 
+
+        <div class="form-group">
+            <button type="button" class="btn btn-secondary btn-lg btn-block" onClick={print}>Tulosta tilauksen liput</button>    
+        </div>         
 
     </form>
     </div>
@@ -215,13 +235,49 @@ const [selectedType, setSelectedType] = useState('');
             ))}
             </tbody>
 		 </table>
-     </div>   
+
+         <div class="form-group">   
+            <p>Summa yhteensä: {sum}  </p>
+        </div>
+
+     </div>       
     </div>
+
+    <div class="print">
+        <table className="table table-dark table-striped table-borderless text-left border border-dark">
+            <thead>
+            <tr>
+                <th>Tapahtuma</th>
+                <th>Hinta</th> 
+                <th>Koodi</th>
+                <th>QR</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            {sold.map(ticket => (
+            <tr key ={ticket.ticketid}>
+                <td> {ticket.event.name} </td>   
+                <td> {ticket.price} </td>  
+                <td> {ticket.ticketcode} </td>
+              
+                          
+                    <QRCode
+                        value={ticket.ticketcode}
+                        size={290}
+                        level={"H"}
+                        includeMargin={true}
+                    />
+            </tr>    
+            ))}
+         
+            </tbody>
+		 </table>
+     </div>
+    
     </div>
           );
         };
  
-
-
 
 export default Buy;

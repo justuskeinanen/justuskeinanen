@@ -21,6 +21,16 @@ code {
   height: 100%;
 }
 
+.print {
+  width: 80%;
+  margin: auto;
+  height: 100%;
+  padding-bottom: 10%;
+  margin-top: 5%;
+}
+
+
+
 .main {
   align-content: center;
   display: flex;
@@ -29,7 +39,8 @@ code {
   margin-top: 5%;
   height: 100%;
   color: black;
-  padding: 3%;
+  width: 80%;
+  margin: auto;
 }
 
 .ticketinfo {
@@ -44,7 +55,8 @@ code {
 
 .formi {
   width: 25%;
-  padding-left: 5%;
+  margin: auto;
+
 }
 
 .reader {
