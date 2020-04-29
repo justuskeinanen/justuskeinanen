@@ -76,14 +76,14 @@ const [result, setResult] = useState([]);
     <div>
     <Header/>   
         
-    <div class ="main">
+    <div className ="main">
  
 
-    <div class="formi">
+    <div className="formi">
 
     <form>
-        <div class="form-group">  
-          <select class="form-control" id="exampleFormControlSelect1" value={selectedEvent} onChange={selectedEvent => setSelectedEvent(selectedEvent.currentTarget.value)}>
+        <div className="form-group">  
+          <select className="form-control" id="exampleFormControlSelect1" value={selectedEvent} onChange={selectedEvent => setSelectedEvent(selectedEvent.currentTarget.value)}>
             <option value="0">Valitse tapahtuma</option>   
             {events.map(item => (
                 <option
@@ -96,8 +96,8 @@ const [result, setResult] = useState([]);
          </select>
          </div>
 
-        <div class="form-group">
-            <button type="button" class="btn btn-secondary btn-lg btn-block" onClick={raportti}>Myyntiraportti</button>    
+        <div className="form-group">
+            <button type="button" className="btn btn-secondary btn-lg btn-block" onClick={raportti}>Myyntiraportti</button>    
         </div>         
 
     </form>
@@ -106,7 +106,7 @@ const [result, setResult] = useState([]);
        
     </div>
 
-    <div class="print">
+    <div className="print">
         <table className="table table-dark table-striped table-borderless text-left border border-dark">
             <thead>
             <tr>

@@ -4,6 +4,7 @@ import QRCode from "qrcode"; //requires npm install qrcode, originated from: htt
 // also covered here : https://davidwalsh.name/create-qr-code
 import QrReader from "react-qr-reader"; //https://reactjsexample.com/react-component-for-reading-qr-codes-from-webcam/
 import Header from "./Header";
+import Footer from "./Footer";
 
 class MainContent extends React.Component {
   constructor(props) {
@@ -87,86 +88,101 @@ class MainContent extends React.Component {
   render() {
     return (
       
-      <div class ="reader">
-      <Header/>
+  <div>
+    <Header/>
+      <div className ="main">
 
-        <form onSubmit={this.handleSubmit}>
-          <label style={{ color: "#61dafb" }}>
-            Insert ticket-code:
-            <input
-              id="ticketcode"
-              type="text"
-              value={this.state.value}
-              onChange={this.handleChange}
-            ></input>
-          </label>
-          <input type="submit" value="Submit" />
-        </form>
-        <button
-          id="readQR"
-          className="btn btn-success"
-          onClick={this.showReader}
-        >
-          Or read a QR-code
-        </button>
-        <span id="QRReader" className="container" style={{ display: "none" }}>
-          <QrReader
-            delay={300}
-            onError={this.handleError}
-            onScan={this.handleScan}
-            style={{ width: "50%" }}
-          />
-        </span>
+        <div className="form-group" style={{paddingLeft: '10%', }}>> 
 
-<div class="ticketinfo">
-        <div class="formi">
-          <table className="table table-dark table-striped table-borderless text-left border border-dark">
-            <thead>
-              <tr>
-                <th>
-                  <h3>Ticket info:</h3>
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <th>Ticket id: </th>
-                <td id="ticketid"></td>
-              </tr>
-              <tr>
-                <th>Event name: </th>
-                <td id="eventname"></td>
-              </tr>
-              <tr>
-                <th>Ticket type:</th>
-                <td id="tickettype"></td>
-              </tr>
-              <tr>
-                <th>Validity: </th>
-                <td id="valid"></td>
-              </tr>
-              <tr>
-                <th>Used: </th>
-                <td id="used"></td>
-              </tr>
-            </tbody>
-          </table>
+          <form onSubmit={this.handleSubmit}>
+            <label style={{ color: "#61dafb", fontSize: 22}}>
+              Insert ticket-code:
+              <input
+                className="form-control"
+                id="ticketcode"
+                type="text"
+                value={this.state.value}
+                onChange={this.handleChange}
+              ></input>
+            </label>
 
-          <input
-            onClick={this.readTicket}
-            className="btn btn-danger"
-            defaultValue="Use this ticket!"
-          ></input>
+            <div className="form-group">
+              <button type="button" className="btn btn-secondary btn-lg btn-block" type="submit">Hae lipun tiedot</button>
+            </div>
 
-          <p id="result" style={{ color: "#61dafb" }}></p>
-        </div>
+          </form>
 
-        <canvas class="canva" id="qr" width="300" height="300">
+          <div className="form-group">
+            <button
+              id="readQR"
+              className="btn btn-secondary btn-lg btn-block"
+              onClick={this.showReader}
+            > Or read a QR-code 
+            </button>
+          </div>
 
-        </canvas>
+          <span id="QRReader" className="container" style={{ display: "none" }}>
+            <QrReader
+              delay={300}
+              onError={this.handleError}
+              onScan={this.handleScan}
+              style={{ width: "50%" }}
+            />
+          </span>
 
-      </div> 
       </div>
+      
+
+
+       <div className='half'>          
+                <table class="table table-dark table-striped table-borderless text-left border border-dark">
+                  <thead>
+                    <tr>
+                      <th>
+                        <h3>Ticket info:</h3>
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <th>Ticket id: </th>
+                      <td id="ticketid"></td>
+                    </tr>
+                    <tr>
+                      <th>Event name: </th>
+                      <td id="eventname"></td>
+                    </tr>
+                    <tr>
+                      <th>Ticket type:</th>
+                      <td id="tickettype"></td>
+                    </tr>
+                    <tr>
+                      <th>Validity: </th>
+                      <td id="valid"></td>
+                    </tr>
+                    <tr>
+                      <th>Used: </th>
+                      <td id="used"></td>
+                    </tr>
+                  </tbody>
+                </table>
+
+                <input
+                onClick={this.readTicket}
+                className="btn btn-danger"
+                defaultValue="Käytä lippu"
+                ></input>
+
+                <p id="result" style={{ color: "#61dafb" }}></p>
+             
+
+              <canvas className="canva" id="qr" width="300" height="300"></canvas>
+
+                </div>
+            </div>
+        <Footer/> 
+      </div>
+    
     );
   }
 }

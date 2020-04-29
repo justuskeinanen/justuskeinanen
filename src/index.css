@@ -15,21 +15,6 @@ code {
     monospace;
 }
 
-.half {
-  width: 55%;
-  margin: auto;
-  height: 100%;
-}
-
-.print {
-  width: 80%;
-  margin: auto;
-  height: 100%;
-  padding-bottom: 10%;
-  margin-top: 5%;
-}
-
-
 
 .main {
   align-content: center;
@@ -39,8 +24,28 @@ code {
   margin-top: 5%;
   height: 100%;
   color: black;
-  width: 80%;
+  width: 100%;
   margin: auto;
+}
+
+.form-side {
+  width: 30%;
+  margin: auto;
+  height: 100%;
+}
+
+.half {
+  width: 55%;
+  margin: auto;
+  height: 100%;
+}
+
+.print {
+  width: 90%;
+  margin: auto;
+  height: 100%;
+  padding-bottom: 30%;
+  margin-top: 5%;
 }
 
 .ticketinfo {
@@ -59,17 +64,13 @@ code {
 
 }
 
-.reader {
-  align-content: center;
-}
-
 p {
   color: white;
+  padding-top: 5px;
+  padding-top: 5px;
 }
 
 .App-footer {
-  position: absolute;
   bottom: 0;
-
   width: 100%;
 }

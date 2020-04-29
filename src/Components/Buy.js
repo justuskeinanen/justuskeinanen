@@ -1,7 +1,6 @@
 import React from "react";
 import {useState, useEffect} from "react";
 import Header from "./Header";
-import QRCode from "qrcode.react";
 
 
 function Buy () {
@@ -24,6 +23,7 @@ const [selectedEvent, setSelectedEvent] = useState('');
 const [selectedType, setSelectedType] = useState('');
 const [sold, setSold] = useState([]);
 const [sum, setSum] =useState(0);
+const [errormessage, setErrormessage] = useState('');
 
 
       async function getOrder() {
@@ -41,11 +41,14 @@ const [sum, setSum] =useState(0);
             },
             body : JSON.stringify({})
             });
-        const json = await response.json();
-            console.log(json.orderid);
-            setOrderid(JSON.stringify(json.orderid))
+
+            if(response.status === 201){
+                const json = await response.json();
+                setOrderid(JSON.stringify(json.orderid))
+             } 
         } catch (error) {
             console.log("error");
+            setErrormessage('Tilauksen teko ei onnistu');
         }
         }
 
@@ -64,11 +67,17 @@ const [sum, setSum] =useState(0);
                  'Authorization' : 'Basic ' + auth,
              }
              });
-         const json = await response.json();
-             console.log(json);
-             setEvents(json)
+             if(response.status === 200){
+                const json = await response.json();
+                console.log(json);
+                setEvents(json)
+             } else {
+                setErrormessage('Ei tapahtumia')
+             }
          } catch (error) {
              console.log("error");
+             setErrormessage('Tapahtumien haku ei onnistu')
+
          }
          }
 
@@ -90,19 +99,27 @@ const [sum, setSum] =useState(0);
                      'Content-Type' : 'application/json',
                      'Authorization' : 'Basic ' + auth,
                  },
-                 body : JSON.stringify({
-        
+                 body : JSON.stringify({        
                     pcs: pcs,
                     orderid: orderid,
                     tickettypeid: selectedType,
-              
+             
                   })                 
                  });
-             const json = await response.json();
-                 console.log(json);
-                 setTickets(json)
+                //jos palauttaa ok = lista    
+                if(response.status === 201){
+                    const json = await response.json();
+                    console.log(json);
+                    setTickets(json)
+                    setErrormessage('');
+                //palauttaa 400 jos kaikkia kenttiä ja orderidtä ei olla annettu
+                } else {
+                    setErrormessage('Tarkista kaikki pakolliset kentät!')
+                }
              } catch (error) {
                  console.log("error");
+                 setErrormessage('Lipun osto ei onnistu')
+
              }
              }
 
@@ -124,11 +141,17 @@ const [sum, setSum] =useState(0);
                          'Authorization' : 'Basic ' + auth,
                      },                
                      });
-                 const json = await response.json();
-                     console.log(json);
-                     setSold(json)
+                     if(response.status === 200){
+                        const json = await response.json();
+                        console.log(json);
+                        setSold(json)
+                    } else {
+                        setErrormessage('Lippuja ei löydy tilaukselle!')
+                    }
+                     
                  } catch (error) {
                      console.log("error");
+                     setErrormessage('Tulostus ei onnistu, ehkä tilaus ei sisällä lippuja')
                  }
                  }
 
@@ -150,7 +173,7 @@ const [sum, setSum] =useState(0);
                          });
                      const json = await response.json();
                          console.log(json);
-                         setSum(json.total);
+                         setSum(json.total);                    
                      } catch (error) {
                          console.log("error");
                      }
@@ -162,27 +185,27 @@ const [sum, setSum] =useState(0);
     <div>
     <Header/>   
         
-    <div class ="main">
+    <div className ="main">
  
 
-    <div class="formi">
+    <div className="formi">
 
-        <div class="form-group">
-            <button type="button" class="btn btn-secondary btn-lg btn-block" onClick={getOrder}>Uusi tilaus</button>    
+        <div className="form-group">
+            <button type="button" className="btn btn-secondary btn-lg btn-block" onClick={getOrder}>Uusi tilaus</button>    
         </div> 
 
-        <div class="form-group">   
-    <p>Käsittelyssä oleva tilaus: {orderid}  (luo uusi jos tyhjä) </p>
+        <div className="form-group">   
+            <p>Käsittelyssä oleva tilaus: {orderid}  (luo uusi jos tyhjä) </p>
         </div>
         
         <form>
-        <div class="form-group">   
-        <input class="form-control" type="number" value={pcs} id="example-number-input" onChange={ pcs => setPcs(pcs.currentTarget.value) }></input>    
+        <div className="form-group">   
+            <input className="form-control" type="number" placeholder="Lippujen lkm" value={pcs} id="example-number-input" onChange={ pcs => setPcs(pcs.currentTarget.value) }></input>    
         </div> 
 
 
-        <div class="form-group">  
-          <select class="form-control" id="exampleFormControlSelect1" value={selectedEvent} onChange={selectedEvent => setSelectedEvent(selectedEvent.currentTarget.value)}>
+        <div className="form-group">  
+          <select className="form-control" id="exampleFormControlSelect1" value={selectedEvent} onChange={selectedEvent => setSelectedEvent(selectedEvent.currentTarget.value)}>
             <option value="0">Valitse tapahtuma</option>   
             {events.map(item => (
                 <option
@@ -195,27 +218,28 @@ const [sum, setSum] =useState(0);
          </select>
          </div>
 
-        <div class="form-group">  
-          <select class="form-control" id="exampleFormControlSelect1"  value={selectedType} onChange={(selectedType) => setSelectedType(selectedType.target.value)}>
-          <option value="4">Valitse lipputyyppi</option>
+        <div className="form-group">  
+          <select className="form-control" id="exampleFormControlSelect1"  value={selectedType} onChange={(selectedType) => setSelectedType(selectedType.target.value)}>
+          <option value="0">Valitse lipputyyppi</option>
             <option value="4">Aikuinen</option>
             <option value="5">Lapsi</option>
             <option value="6">Opiskelija</option>
           </select>
+          <p> {errormessage}  </p>
           </div>
 
-        <div class="form-group">
-            <button type="button" class="btn btn-secondary btn-lg btn-block" onClick={buy}>Osta liput</button>    
+        <div className="form-group">
+            <button type="button" className="btn btn-secondary btn-lg btn-block" onClick={buy}>Osta liput</button>    
         </div> 
 
-        <div class="form-group">
-            <button type="button" class="btn btn-secondary btn-lg btn-block" onClick={print}>Tulosta tilauksen liput</button>    
+        <div className="form-group">
+            <button type="button" className="btn btn-secondary btn-lg btn-block" onClick={print}>Tulosta tilauksen liput</button>    
         </div>         
 
     </form>
     </div>
 
-    <div class="half">
+    <div className="half">
         <table className="table table-dark table-striped table-borderless text-left border border-dark">
             <thead>
             <tr>
@@ -236,14 +260,14 @@ const [sum, setSum] =useState(0);
             </tbody>
 		 </table>
 
-         <div class="form-group">   
+         <div className="form-group">   
             <p>Summa yhteensä: {sum}  </p>
         </div>
 
      </div>       
     </div>
 
-    <div class="print">
+    <div className="print">
         <table className="table table-dark table-striped table-borderless text-left border border-dark">
             <thead>
             <tr>

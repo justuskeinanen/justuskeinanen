@@ -9,19 +9,19 @@ function Navi() {
   return (
     <Router>   
         <div>
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <nav className="navbar navbar-expand-lg navbar-light bg-light">
 
-            <div class="collapse navbar-collapse" id="navbarNav">
+            <div className="collapse navbar-collapse" id="navbarNav">
 
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link" href="/read">Lue</a>
+                <ul className="navbar-nav">
+                    <li className="nav-item">
+                        <a className="nav-link" href="/read">Lue</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/buy">Osta lippuja</a>
+                    <li className="nav-item">
+                        <a className="nav-link" href="/buy">Osta lippuja</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/raport">Raportit</a>
+                    <li className="nav-item">
+                        <a className="nav-link" href="/raport">Raportit</a>
                     </li>
                 </ul>
             </div>
