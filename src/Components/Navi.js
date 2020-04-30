@@ -3,6 +3,7 @@ import {BrowserRouter as Router, Switch, Route} from "react-router-dom";
 import MainContent from "./MainContent";
 import Buy from "./Buy";
 import Raport from "./Raport";
+import Read from "./Read";
 
 function Navi() {
 
@@ -16,6 +17,9 @@ function Navi() {
                 <ul className="navbar-nav">
                     <li className="nav-item">
                         <a className="nav-link" href="/read">Lue</a>
+                    </li>
+                    <li className="nav-item">
+                        <a className="nav-link" href="/reader">Lue (uusi)</a>
                     </li>
                     <li className="nav-item">
                         <a className="nav-link" href="/buy">Osta lippuja</a>
@@ -37,6 +41,9 @@ function Navi() {
           </Route>
           <Route path="/raport">
             <Raport />
+          </Route>
+          <Route path="/reader">
+            <Read />
           </Route>
         </Switch>
 

@@ -79,11 +79,12 @@ class MainContent extends React.Component {
       }
     )
       .then(response => response.json())
-      .then(response => {
-        document.getElementById("result").innerText = JSON.stringify(response);
-        console.log(response);
-      });
+      .then(data => {
+        console.log(data);
+      })
   }
+
+
 
   render() {
     return (
@@ -173,7 +174,7 @@ class MainContent extends React.Component {
                 defaultValue="Käytä lippu"
                 ></input>
 
-                <p id="result" style={{ color: "#61dafb" }}></p>
+                <p id="result" style={{ color: "#61dafb" }}>  </p>
              
 
               <canvas className="canva" id="qr" width="300" height="300"></canvas>
