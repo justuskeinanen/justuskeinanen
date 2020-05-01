@@ -78,9 +78,10 @@ class MainContent extends React.Component {
         referrerPolicy: "no-referrer"
       }
     )
-      .then(response => response.json())
-      .then(data => {
-        console.log(data);
+      .then(response => response.text())
+      .then(response => {
+        console.log(response);
+        document.getElementById("result").innerText = response;
       })
   }
 
@@ -168,11 +169,11 @@ class MainContent extends React.Component {
                   </tbody>
                 </table>
 
-                <input
+              <button
+                className="btn btn-secondary btn-lg btn-block"
                 onClick={this.readTicket}
-                className="btn btn-danger"
-                defaultValue="Käytä lippu"
-                ></input>
+              > Käytä lippu 
+              </button>
 
                 <p id="result" style={{ color: "#61dafb" }}>  </p>
              

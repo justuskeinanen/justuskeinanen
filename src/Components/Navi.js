@@ -19,9 +19,6 @@ function Navi() {
                         <a className="nav-link" href="/read">Lue</a>
                     </li>
                     <li className="nav-item">
-                        <a className="nav-link" href="/reader">Lue (uusi)</a>
-                    </li>
-                    <li className="nav-item">
                         <a className="nav-link" href="/buy">Osta lippuja</a>
                     </li>
                     <li className="nav-item">
@@ -41,9 +38,6 @@ function Navi() {
           </Route>
           <Route path="/raport">
             <Raport />
-          </Route>
-          <Route path="/reader">
-            <Read />
           </Route>
         </Switch>
 
