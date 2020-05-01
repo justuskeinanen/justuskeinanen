@@ -7,6 +7,7 @@ function Buy () {
 
     useEffect(() => {
         getEvents();
+        getType();
     }, []);
 
     useEffect(() => {
@@ -24,6 +25,7 @@ const [selectedType, setSelectedType] = useState('');
 const [sold, setSold] = useState([]);
 const [sum, setSum] =useState(0);
 const [errormessage, setErrormessage] = useState('');
+const [types, setTypes] = useState([]);
 
 
       async function getOrder() {
@@ -80,6 +82,32 @@ const [errormessage, setErrormessage] = useState('');
 
          }
          }
+
+         async function getType() {
+            try {   
+                 const auth = btoa('niilo:salasana');
+                 const response = await fetch("https://ticketguru.herokuapp.com/autoapi/ticketTypes/", {
+                 method : 'get',
+                 mode: 'cors',
+                 cache : 'no-cache',
+                 credentials : 'same-origin',
+                 headers : {
+                     'Accept': 'application/json',
+                     'Content-Type' : 'application/json',
+                     'Authorization' : 'Basic ' + auth,
+                 }
+                 });
+                 if(response.status === 200){
+                    const json = await response.json();
+                    console.log(json._embedded.ticketTypes);
+                    setTypes(json._embedded.ticketTypes);
+                 } 
+             } catch (error) {
+                 console.log("error");
+                 setErrormessage('Tyyppien haku ei onnistu')
+    
+             }
+             }
 
          async function buy(evt) {
             evt.preventDefault(); 
@@ -205,7 +233,8 @@ const [errormessage, setErrormessage] = useState('');
 
 
         <div className="form-group">  
-          <select className="form-control" id="exampleFormControlSelect1" value={selectedEvent} onChange={selectedEvent => setSelectedEvent(selectedEvent.currentTarget.value)}>
+          <select className="form-control" id="exampleFormControlSelect1" value={selectedEvent} 
+          onChange={selectedEvent => setSelectedEvent(selectedEvent.currentTarget.value)}>
             <option value="0">Valitse tapahtuma</option>   
             {events.map(item => (
                 <option
@@ -219,11 +248,17 @@ const [errormessage, setErrormessage] = useState('');
          </div>
 
         <div className="form-group">  
-          <select className="form-control" id="exampleFormControlSelect1"  value={selectedType} onChange={(selectedType) => setSelectedType(selectedType.target.value)}>
-          <option value="0">Valitse lipputyyppi</option>
-            <option value="4">Aikuinen</option>
-            <option value="5">Lapsi</option>
-            <option value="6">Opiskelija</option>
+          <select className="form-control" id="exampleFormControlSelect1"  value={selectedType} 
+          onChange={(selectedType) => setSelectedType(selectedType.currentTarget.value)}>
+          <option value="0">Valitse lipputyyppi</option>   
+            {types.map(item => (
+                <option
+                key={item.ticketypeid}
+                value={item.ticketypeid} 
+                >
+                {item.type} 
+                </option>
+            ))}
           </select>
           <p> {errormessage}  </p>
           </div>
