@@ -29,12 +29,23 @@ class MainContent extends React.Component {
     try {
       getTicket(this.state.value).then(data => {
         console.log(data);
-        document.getElementById("ticketid").innerText = data.ticketid;
-        document.getElementById("eventname").innerText = data.event.name;
-        document.getElementById("tickettype").innerText = data.type.type;
-        document.getElementById("valid").innerText = data.valid;
-        document.getElementById("used").innerText = data.used;
-        generateQR(data.ticketcode);
+        if (data.hasOwnProperty('ticketid')) {
+          document.getElementById("result").innerText = "";
+          document.getElementById("ticketid").innerText = data.ticketid;
+          document.getElementById("eventname").innerText = data.event.name;
+          document.getElementById("tickettype").innerText = data.type.type;
+          document.getElementById("valid").innerText = data.valid;
+          document.getElementById("used").innerText = data.used;
+          generateQR(data.ticketcode);
+        } else {
+          document.getElementById("result").innerText = "Lippua ei löydy";
+          document.getElementById("ticketid").innerText = "";
+          document.getElementById("eventname").innerText = "";
+          document.getElementById("tickettype").innerText = "";
+          document.getElementById("valid").innerText = "";
+          document.getElementById("used").innerText = "";
+          generateQR("");
+        }
       });
     } catch (error) {
       console.log(error);
@@ -81,7 +92,11 @@ class MainContent extends React.Component {
       .then(response => response.text())
       .then(response => {
         console.log(response);
+        if (response.includes("Error")) {
+          document.getElementById("result").innerText = "Syötä olemassa oleva lippu";
+        } else {
         document.getElementById("result").innerText = response;
+        }
       })
   }
 
@@ -198,21 +213,32 @@ const generateQR = async text => {
   }
 };
 
+
 async function getTicket(code = "") {
-  const auth = btoa("niilo:salasana");
-  const response = await fetch("https://ticketguru.herokuapp.com/api/tickets/" + code, {
-    method: "GET",
-    mode: "cors",
-    cache: "no-cache",
-    credentials: "same-origin",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: "Basic " + auth
-    },
-    redirect: "follow",
-    referrerPolicy: "no-referrer"
-  });
-  return await response.json();
-}
+  try {   
+       const auth = btoa('niilo:salasana');
+       const response = await fetch("https://ticketguru.herokuapp.com/api/tickets/" + code, {
+       method : 'get',
+       mode: 'cors',
+       cache : 'no-cache',
+       credentials : 'same-origin',
+       headers : {
+           'Accept': 'application/json',
+           'Content-Type' : 'application/json',
+           'Authorization' : 'Basic ' + auth,
+       }
+       });
+       
+          const json = await response.json();
+          return json;
+
+      } catch (error) {
+          console.log("error");
+          document.getElementById("result").innerText = "Ei onnistu";
+
+      }
+      }
+
+
 
 export default MainContent;
