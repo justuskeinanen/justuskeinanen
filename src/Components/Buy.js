@@ -56,7 +56,7 @@ const [errormessage, setErrormessage] = useState('');
       async function getEvents() {
         try {   
              const auth = btoa('niilo:salasana');
-             const response = await fetch("https://ticketguru.herokuapp.com/api/events/", {
+             const response = await fetch("https://ticketguru.herokuapp.com/api/events/upcoming", {
              method : 'get',
              mode: 'cors',
              cache : 'no-cache',
@@ -210,9 +210,9 @@ const [errormessage, setErrormessage] = useState('');
             {events.map(item => (
                 <option
                 key={item.eventid}
-                value={item.eventid}
+                value={item.eventid} 
                 >
-                {item.name}
+                {item.name} {item.startTime}
                 </option>
             ))}
          </select>
